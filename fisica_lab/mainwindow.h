@@ -33,9 +33,11 @@ private:
     Ui::MainWindow *ui;
     QGraphicsScene *escena;
     QTimer *timer;
-
+    bala proyectil;
+    QGraphicsEllipseItem *graficobala;
     vector<barrera>barreras;
     vector<QGraphicsRectItem*>iconos_barrera;
+
 
     bool dispaencurso;
     int turnojugador;

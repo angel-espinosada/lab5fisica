@@ -43,6 +43,11 @@ void bala::setVY(float vy) {
     this->VY = vy;
 }
 
+float bala::getRadio()
+{
+    return radio;
+}
+
 void bala::actualizarPosicion(float dt, float g)
 {
     x=x+VX*dt;
