@@ -1,14 +1,16 @@
 #include "bala.h"
 
-bala::bala(float x, float y, float vx, float vy)
+bala::bala(float x, float y, float vx, float vy, float masa, float radio)
 {
     this->x=x;
     this->y=y;
     this->VX=vx;
     this->VY=vy;
+    this ->masa=masa;
+    this->radio=radio;
+
 }
 
-bala::bala() {}
 float bala ::getX() {
     return x;
 }
@@ -39,4 +41,11 @@ void bala::setVX(float vx) {
 
 void bala::setVY(float vy) {
     this->VY = vy;
+}
+
+void bala::actualizarPosicion(float dt, float g)
+{
+    x=x+VX*dt;
+    y=y+VY*dt+0.5f*g*dt*dt;
+    VY=VY+g*dt;
 }

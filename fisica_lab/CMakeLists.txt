@@ -12,6 +12,7 @@ qt_add_executable(fisica_lab
     mainwindow.h
     mainwindow.ui
     bala.h bala.cpp
+    barrera.h barrera.cpp
 )
 
 target_link_libraries(fisica_lab
