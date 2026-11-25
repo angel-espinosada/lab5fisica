@@ -43,9 +43,25 @@ void bala::setVY(float vy) {
     this->VY = vy;
 }
 
+float bala::getMasa()
+{
+    return masa;
+}
+
 float bala::getRadio()
 {
     return radio;
+}
+
+void bala::setMasa(float masa)
+{
+    this->masa=masa;
+
+}
+
+void bala::setRadio(float radio)
+{
+    this->radio=radio;
 }
 
 void bala::actualizarPosicion(float dt, float g)

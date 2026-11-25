@@ -41,7 +41,9 @@ private:
 
     bool dispaencurso;
     int turnojugador;
-   void agregarbarrera(float x, float y, float ancho, float alto, float dureza);
+    int rebotes;
+    void terminaturno();
+    void agregarbarrera(float x, float y, float ancho, float alto, float dureza);
 
 };
 #endif // MAINWINDOW_H

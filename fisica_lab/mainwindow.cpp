@@ -79,12 +79,86 @@ void MainWindow::on_btndisparar_clicked()
     graficobala->setPos(x0-r, y0-r);
 
     dispaencurso=true;
+    rebotes = 0;
     timer->start(20);
 }
 
 void MainWindow::actualizarFisica()
 {
+    float dt=0.05f;
+    float g=9.8f;
+    proyectil.actualizarPosicion(dt,g);
 
+    float x=proyectil.getX();
+    float y=proyectil.getY();
+    float vx= proyectil.getVX();
+    float vy=proyectil.getVY();
+    float r= proyectil.getRadio();
+    //rebotes
+    if(x-r<=0.0f){
+        proyectil.setX(r);
+        proyectil.setVX(-vx);
+        rebotes ++;
+
+    }else if(x+r>=740.0f){
+        proyectil.setX(740.0f-r);
+        proyectil.setVX(-vx);
+        rebotes ++;
+
+    }
+
+    if(y-r<=0.0f){
+        proyectil.setY(r);
+        proyectil.setVY(-vy);
+        rebotes ++;
+
+    }else if(y+r>=380.0f){
+        proyectil.setY(380.0f-r);
+        proyectil.setVY(-vy);
+        rebotes ++;
+
+    }
+    graficobala->setPos(proyectil.getX()-r,proyectil.getY()-r);
+    if(rebotes>=3){
+        terminaturno();
+    }
+
+    for(int i=0;i<barreras.size(); i++){
+        if(barreras[i].estaderribada()){
+            continue;
+        }
+        if(graficobala->collidesWithItem(iconos_barrera[i])){
+            float v=sqrt(vx*vx+vy*vy);
+            float danio=0.3f*proyectil.getMasa()*v;
+            barreras[i].recibirataque(danio);
+
+            if(barreras[i].estaderribada()){
+                iconos_barrera[i]->hide();
+            }
+            proyectil.setVX(-vx*0.5f);
+            proyectil.setVY(-vy*0.5f);
+            rebotes++;
+            break;
+        }
+
+    }
+}
+
+void MainWindow::terminaturno()
+{
+    timer->stop();
+    dispaencurso=false;
+
+
+    if(turnojugador==1){
+
+        turnojugador=2;
+        ui->lblTurno->setText("Turno Jugador 2");
+
+    }else{
+        turnojugador=1;
+        ui->lblTurno->setText("Turno: Jugador 1");
+    }
 }
 
 void MainWindow::agregarbarrera(float x, float y, float ancho, float alto, float dureza)
