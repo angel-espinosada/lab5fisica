@@ -119,9 +119,7 @@ void MainWindow::actualizarFisica()
 
     }
     graficobala->setPos(proyectil.getX()-r,proyectil.getY()-r);
-    if(rebotes>=3){
-        terminaturno();
-    }
+
 
     for(int i=0;i<barreras.size(); i++){
         if(barreras[i].estaderribada()){
@@ -131,13 +129,26 @@ void MainWindow::actualizarFisica()
             float v=sqrt(vx*vx+vy*vy);
             float danio=0.3f*proyectil.getMasa()*v;
             barreras[i].recibirataque(danio);
+            textobarrera[i]->setPlainText(QString::number((int)barreras[i].getDureza()));
 
             if(barreras[i].estaderribada()){
                 iconos_barrera[i]->hide();
+                textobarrera[i]->hide();
+
             }
+            proyectil.setX(x-vx*dt);
+            proyectil.setY(y-vy*dt);
+            float dibujoX=proyectil.getX()-r;
+            float dibujoY=proyectil.getY()-r;
+            graficobala->setPos(dibujoX, dibujoY);
+
+
             proyectil.setVX(-vx*0.5f);
             proyectil.setVY(-vy*0.5f);
             rebotes++;
+            if(rebotes>=3){
+                terminaturno();
+            }
             break;
         }
 
@@ -163,10 +174,15 @@ void MainWindow::terminaturno()
 
 void MainWindow::agregarbarrera(float x, float y, float ancho, float alto, float dureza)
 {
+
+
     barrera b(x,y, ancho,alto, dureza);
     barreras.push_back(b);
     QColor color=(dureza>=200.0f)?QColor(255,224,178):QColor(220, 220, 220);
     QGraphicsRectItem *rect=escena->addRect(x,y,ancho,alto, QPen(Qt::black),QBrush(color));
     iconos_barrera.push_back(rect);
+    QGraphicsTextItem *texto=escena->addText(QString::number((int)dureza));
+    texto->setPos(x+ancho/2-15,y+alto/2-10);
+    textobarrera.push_back(texto);
 }
 

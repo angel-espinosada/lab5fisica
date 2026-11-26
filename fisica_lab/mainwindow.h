@@ -9,6 +9,8 @@
 #include <vector>
 #include "bala.h"
 #include "barrera.h"
+#include<QGraphicsTextItem>
+
 using namespace std;
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -44,6 +46,6 @@ private:
     int rebotes;
     void terminaturno();
     void agregarbarrera(float x, float y, float ancho, float alto, float dureza);
-
+    vector<QGraphicsTextItem*>textobarrera;
 };
 #endif // MAINWINDOW_H
