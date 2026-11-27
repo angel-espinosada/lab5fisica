@@ -3,6 +3,8 @@
 #include <QBrush>
 #include <QPen>
 #include<cmath>
+#include<QMessageBox>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,13 +21,13 @@ MainWindow::MainWindow(QWidget *parent)
     agregarbarrera(50,280,35,100,200.0f);
     agregarbarrera(155,280,35, 100, 200.0f);
     agregarbarrera(50,245,140, 35, 100.0f);
-    escena->addEllipse(108,330, 24, 24, QPen(Qt::black), QBrush(Qt::blue));
+    rival1=escena->addEllipse(108,330, 24, 24, QPen(Qt::black), QBrush(Qt::blue));
     //Lado derecho
 
     agregarbarrera(550, 280, 35, 100, 200.0f);
     agregarbarrera(655, 280, 35, 100, 200.0f);
     agregarbarrera(550, 245, 140, 35, 100.0f);
-    escena->addEllipse(608,330, 24, 24, QPen(Qt::black), QBrush(Qt::red));
+    rival2=escena->addEllipse(608,330, 24, 24, QPen(Qt::black), QBrush(Qt::red));
 //cañon
     escena->addRect(10,180, 30,15, QPen(Qt::black), QBrush(Qt::darkGray));
     escena->addRect(700,180, 30,15, QPen(Qt::black), QBrush(Qt::darkGray));
@@ -89,6 +91,7 @@ void MainWindow::actualizarFisica()
     float g=9.8f;
     proyectil.actualizarPosicion(dt,g);
 
+
     float x=proyectil.getX();
     float y=proyectil.getY();
     float vx= proyectil.getVX();
@@ -97,24 +100,25 @@ void MainWindow::actualizarFisica()
     //rebotes
     if(x-r<=0.0f){
         proyectil.setX(r);
-        proyectil.setVX(-vx);
+        proyectil.setVX(-vx*0.7f);
         rebotes ++;
 
     }else if(x+r>=740.0f){
         proyectil.setX(740.0f-r);
-        proyectil.setVX(-vx);
+        proyectil.setVX(-vx*0.7f);
         rebotes ++;
 
     }
 
     if(y-r<=0.0f){
         proyectil.setY(r);
-        proyectil.setVY(-vy);
+        proyectil.setVY(-vy*0.7f);
         rebotes ++;
 
     }else if(y+r>=380.0f){
         proyectil.setY(380.0f-r);
-        proyectil.setVY(-vy);
+        proyectil.setVY(-vy*0.7f);
+        proyectil.setVX(vx*0.8f);//friccion
         rebotes ++;
 
     }
@@ -146,13 +150,42 @@ void MainWindow::actualizarFisica()
             proyectil.setVX(-vx*0.5f);
             proyectil.setVY(-vy*0.5f);
             rebotes++;
-            if(rebotes>=3){
-                terminaturno();
-            }
             break;
         }
-
     }
+            if(graficobala->collidesWithItem(rival1)){
+                timer->stop();
+                rival1->hide();
+                QMessageBox::information(this,"Fin de juego", "Gano el jugador 2");
+                return;
+
+            }
+            if(graficobala->collidesWithItem(rival2)){
+                timer->stop();
+                rival1->hide();
+                QMessageBox::information(this,"Fin de juego", "Gano el jugador 1");
+                return;
+
+            }
+
+
+
+
+
+        //obtener datos...para ver por que se termina turno
+        float vxact=proyectil.getVX();
+        float vyact=proyectil.getVY();
+        float rapidez1=sqrt(vxact*vxact+vyact*vyact);
+        qDebug() <<"X: "<<proyectil.getX()<<"Y: "<<proyectil.getY()<<"VX:"<<vxact<<"VY: "<<vyact<<"Rapidez"<<rapidez1;
+
+
+        float rapidez=sqrt(vx*vx+vy*vy);
+        if(rapidez<12.0f){
+            qDebug()<<"entra a terminar turno";
+            terminaturno();
+        }
+
+
 }
 
 void MainWindow::terminaturno()

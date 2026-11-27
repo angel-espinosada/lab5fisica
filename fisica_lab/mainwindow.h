@@ -39,6 +39,8 @@ private:
     QGraphicsEllipseItem *graficobala;
     vector<barrera>barreras;
     vector<QGraphicsRectItem*>iconos_barrera;
+    QGraphicsEllipseItem *rival1;
+    QGraphicsEllipseItem *rival2;
 
 
     bool dispaencurso;
